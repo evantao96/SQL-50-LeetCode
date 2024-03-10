@@ -12,7 +12,7 @@
 -- ) AS Confirmed
 -- ON Timeouts.user_id = Confirmed.user_id;
 
-SELECT Signups.user_id, IFNULL(ROUND(COUNT(CASE WHEN action = "confirmed" THEN 1 END) / (COUNT(CASE WHEN action = "confirmed" THEN 1 END) + COUNT(CASE WHEN action = "timeout" THEN 1 END)), 2), 0) AS confirmation_rate
+SELECT Signups.user_id, IFNULL(ROUND(AVG(CASE WHEN action = "confirmed" THEN 1 ELSE 0 END), 2), 0) AS confirmation_rate
 FROM Confirmations
 RIGHT JOIN Signups
 ON Confirmations.user_id = Signups.user_id
