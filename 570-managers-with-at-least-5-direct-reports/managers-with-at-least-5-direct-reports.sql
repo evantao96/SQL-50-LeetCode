@@ -1,14 +1,26 @@
 # Write your MySQL query statement below
-WITH qualifiedManagers AS 
-(
-    SELECT managerId 
-    FROM (
-        SELECT managerId, COUNT(IF(name IS NULL, 1, 1)) as managerCount
-        FROM Employee
-        GROUP BY managerId
-    ) AS managers
-    WHERE managerCount >= 5
-)
-SELECT name
-FROM Employee, qualifiedManagers
-WHERE id = qualifiedManagers.managerId;
+
+SELECT name 
+FROM Employee
+INNER JOIN (
+    SELECT managerId
+    FROM Employee
+    GROUP BY managerId
+    HAVING COUNT(IFNULL(name, 1)) >= 5
+) AS managers
+ON Employee.id = managers.managerId;
+-- WITH qualifiedManagers AS 
+-- (
+    --    SELECT managerId
+    --     FROM Employee
+    --     GROUP BY managerId
+    --     HAVING COUNT(IFNULL(name, 1)) >= 5
+-- )
+-- SELECT name
+-- FROM Employee, qualifiedManagers
+-- WHERE id = qualifiedManagers.managerId;
+
+        -- SELECT managerId
+        -- FROM Employee
+        -- GROUP BY managerId
+        -- HAVING COUNT(IFNULL(name, 1)) >= 5
